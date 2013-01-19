@@ -1,0 +1,127 @@
+* {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+::-webkit-scrollbar {
+	width: 17px;
+	height: 17px;
+	background-color: #F0F0F0;
+	border: none;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #CDCDCD;
+	border: 1px solid #F0F0F0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #DADADA;
+}
+
+::-webkit-scrollbar-thumb:active {
+	background-color: #606060;
+}
+
+::-webkit-scrollbar-thumb:disabled {
+	background-color: #F9F9F9;
+}
+
+::-webkit-scrollbar-corner {
+	background-color: #F0F0F0;
+}
+
+::-webkit-scrollbar-button {
+	background-color: #F0F0F0;
+	background-image: url(../img/controls.png);
+	background-repeat: no-repeat;
+}
+
+::-webkit-scrollbar-button:vertical {
+	height: 33px;
+}
+
+::-webkit-scrollbar-button:horizontal {
+	width: 33px;
+}
+
+::-webkit-scrollbar-button:horizontal:increment {
+	background-position: 0px -444px;
+}
+
+::-webkit-scrollbar-button:horizontal:decrement {
+	background-position: 12px -425px;
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+	background-position: -1px -391px;
+}
+
+::-webkit-scrollbar-button:vertical:decrement {
+	background-position: -1px -358px;
+}
+
+::-webkit-scrollbar-button:hover {
+	background-color: #DADADA;
+}
+
+::-webkit-scrollbar-button:horizontal:increment:hover {
+	background-position: 0px -548px;
+}
+
+::-webkit-scrollbar-button:horizontal:decrement:hover {
+	background-position: 12px -529px;
+}
+
+::-webkit-scrollbar-button:vertical:increment:hover {
+	background-position: -1px -495px;
+}
+
+::-webkit-scrollbar-button:vertical:decrement:hover {
+	background-position: -1px -462px;
+}
+
+::-webkit-scrollbar-button:active {
+	background-color: #606060;
+}
+
+::-webkit-scrollbar-button:horizontal:increment:active {
+	background-position: 0px -652px;
+}
+
+::-webkit-scrollbar-button:horizontal:decrement:active {
+	background-position: 12px -633px;
+}
+
+::-webkit-scrollbar-button:vertical:increment:active {
+	background-position: -1px -599px;
+}
+
+::-webkit-scrollbar-button:vertical:decrement:active {
+	background-position: -1px -566px;
+}
+
+::-webkit-scrollbar-button:disabled {
+	background-color: #F9F9F9;
+}
+
+::-webkit-scrollbar-button:horizontal:increment:disabled {
+	background-position: 0px -756px;
+}
+
+::-webkit-scrollbar-button:horizontal:decrement:disabled {
+	background-position: 12px -737px;
+}
+
+::-webkit-scrollbar-button:vertical:increment:disabled {
+	background-position: -1px -703px;
+}
+
+::-webkit-scrollbar-button:vertical:decrement:disabled {
+	background-position: -1px -670px;
+}
+
+.SF_iPhone .sc {
+	-webkit-overflow-scrolling: touch;
+}

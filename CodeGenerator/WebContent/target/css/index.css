@@ -1,0 +1,135 @@
+body {
+	font: normal 13px "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
+	color: #666;
+	background: url(../img/background.jpg) no-repeat center top #EEFCFF;
+	margin: 50px 200px 0px 200px;
+}
+
+ul {
+	list-style: none;
+}
+
+ul li {
+	float: left;
+}
+
+section,header,footer,aside,article,nav {
+	display: block;
+}
+
+/*顶部标题栏*/
+#top h1 {
+	padding: 24px 18px;
+	text-shadow: 0 2px 2px #B0B0B0;
+	-moz-text-shadow: 0 2px 2px #B0B0B0;
+	-webkit-text-shadow: 0 2px 2px #B0B0B0;
+}
+
+/*导航栏*/
+nav {
+	width: 100%;
+	height: 45px;
+	background-color: #0491c7;
+	border: 1px solid #456;
+	position: relative;
+}
+
+nav ul {
+	font-size: 16px;
+	color: #F0F0F0;
+	z-index: 1;
+}
+
+nav li a {
+	color: #F0F0F0;
+	text-decoration: none;
+	font-weight: 500;
+	display: block;
+	padding: 12px 32px;
+	-moz-transition: 0.5s;
+	-o-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
+}
+
+li:hover,li:hover a,.sysadmin li:hover a,a.on {
+	background-color: #ACDAF4;
+	color: #0072DB;
+}
+
+a.on{
+    background-color: #FAFAFA;
+}
+
+.adminli {
+	position: relative;
+}
+
+.adminli:hover .sysadmin {
+	display: block;
+}
+
+.sysadmin {
+	position: absolute;
+	overflow: hidden;
+	top: 46px;
+	left: 0;
+	z-index: 2;
+	display: none;
+	opacity: 0.9;
+}
+
+.sysadmin li {
+	-moz-transition-delay: 0s;
+	-o-transition-delay: 0s;
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	position: relative;
+}
+
+li:hover .sysadmin li {
+	opacity: 1;
+	-moz-transition-delay: 0.3s;
+	-o-transition-delay: 0.3s;
+	-webkit-transition-delay: 0.3s;
+	transition-delay: 0.3s;
+}
+
+.sysadmin li a {
+	border-color: #6E67A6;
+	color: #e1f2f5;
+	-moz-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-o-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-webkit-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-ms-transition: background-color 0.5s ease, color 0.3s ease-out;
+	transition: background-color 0.5s ease, color 0.3s ease-out;
+	background-color: #0491c7;
+	font-size: 14px;
+}
+
+.greet {
+	position: absolute;
+	right: 100px;
+	font-size: 14px;
+	padding: 12px 0;
+	color: #FFF;
+	text-align: right;
+}
+
+#account {
+	float: right;
+	padding: 12px 0;
+}
+
+#logout {
+	display: inline;
+	padding-left: 24px;
+}
+
+/*iframe style*/
+#main {
+	width: 100%;
+	height: 640px;
+	opacity: 0.8;
+	background-color: #eafaff;
+}

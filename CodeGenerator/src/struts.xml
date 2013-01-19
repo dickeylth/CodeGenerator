@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 指定struts 2 配置文件的DTD信息 -->
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<!-- struts是struts 2配置文件的根元素 -->
+<struts>	
+	<!-- 配置struts常量 -->
+	<!-- 指定Web应用的默认编码集，相当于调用 HttpServletRequest的setCharacterEncoding方法。 -->
+	<constant name="struts.i18n.encoding" value="UTF-8"/>
+	
+	<!-- 该属性设置是否每次HTTP请求到达时，系统都重新加载资源文件。该属性默认值是false。在开发阶段将该属性设置为true会更有利于开发， 但在产品发布阶段应将该属性设置为false。 -->
+	<constant name="struts.i18n.reload" value="true"/>
+	
+	<!-- 该属性指定需要Struts 2处理的请求后缀，该属性的默认值是action，即所有匹配*.action的请求都由Struts 2处理。如果用户需要指定多个请求后缀，则多个后缀之间以英文逗号（，）隔开。 -->
+	<constant name="struts.action.extension" value="do" />   
+   
+   	<!-- 设置浏览器是否缓存静态内容，默认值为true（生产环境下使用），开发阶段最好关闭。   -->
+   	<constant name="struts.serve.static.browserCache " value="false" />
+   	
+   	<!-- 当struts 2的配置文件修改后，系统是否自动重新加载该文件，默认值为false（生产环境下使用），开发阶段最好打开。 -->
+   	<constant name="struts.configuration.xml.reload" value="true" />
+   	
+   	<!-- 开发模式下使用，这样可以打印出更详细的错误信息。 -->
+   	<constant name="struts.devMode" value="true" />
+   	
+   	<!-- 默认的国际化地区信息。 -->
+   	<constant name="struts.locale" value="zh_CN"/>
+   	
+   	<!-- 国际化配置 -->
+   	<constant name="struts.custom.i18n.resources" value="messageResource" />
+   	
+   	<!-- 文件上传临时文件夹 -->
+   	<constant name="struts.multipart.saveDir" value="/tmp"></constant>
+   	
+   	<!-- struts 2 的Action必须放在指定的包空间下定义 -->
+	<!-- 定义名为strutssqs的包空间，继承struts-default(定义在struts2-core-X.X.X.X.jar/struts-default.html中) -->
+	<package name="procGen" extends="struts-default" namespace="/">
+		<!-- 处理数据库配置 -->
+		<action name="dbConfig" class="com.codegen.action.DbConfigAction">
+			<!-- 定义处理结果和视图资源之间映射关系 -->
+			<result name="input">/index.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="success">/domain.jsp</result>
+		</action>
+
+		<!-- 处理数据库设计XML文件 -->
+		<action name="domainXmlUpload" class="com.codegen.action.UploadAction">
+			<!-- 设置文件名 -->
+			<param name="fileName">domain.xml</param>
+			<!-- 设置保存路径 -->
+			<param name="savePath">/upload</param>
+			<!-- 定义处理结果和视图资源之间映射关系 -->
+			<result type="redirectAction">
+				<param name="actionName">procCodeGen</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		
+		<!-- 配置处理代码生成的Action -->
+		<action name="procCodeGen" class="com.codegen.action.CodeGenAction">
+			<result>/complete.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+	</package>
+</struts>

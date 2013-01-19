@@ -1,0 +1,17 @@
+﻿<!DOCTYPE project>
+<project name="" basedir="./" default="c">
+  <path id="p">
+    <fileset dir="lib/">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+    
+  <target name="c" depends="">
+    <javac srcdir="src" destdir="classes" classpathref="p" encoding="utf-8"/>
+    <native2ascii src="./src" includes="**/*.properties" dest="./classes" encoding="utf-8"/>
+    <copy todir="${target}">
+    	<fileset dir="../../target"></fileset>
+    </copy>
+  </target>
+  
+</project>

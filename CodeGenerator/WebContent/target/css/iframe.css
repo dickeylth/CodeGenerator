@@ -1,0 +1,155 @@
+body {
+	font: normal 13px "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
+	color: #666;
+	margin: 50px 20px 0px 20px;
+	text-align: center;
+}
+
+ul {
+	list-style: none;
+}
+
+ul li {
+	float: left;
+}
+
+section,header,footer,aside,article,nav {
+	display: block;
+}
+
+.button {
+	background-color: #FFFFFF;
+	border: 1px solid #778899;
+	color: #0072DB;
+	font-family: "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
+	margin: 3px;
+	padding: 5px 12px;
+}
+
+.button:hover {
+	background-color: #0072DB;
+	color: #FFF;
+	cursor: pointer;
+}
+
+/*搜索框*/
+#search {
+	text-align: center;
+	margin: 20px auto;
+}
+
+#keyword {
+	width: 200px;
+}
+
+#property,#keyword {
+	font-family: "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
+	padding: 6px;
+	border: 1px solid #789;
+}
+
+#search_btn {
+	margin-left: -5px;
+}
+
+/*Chrome Hach*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	#search_btn {
+		padding: 6px 14px;
+	}
+}
+
+/*内容框*/
+
+
+#editForm table {
+	text-align: left;
+}
+
+table,#options ul {
+	margin: 10px auto;
+}
+
+input[type=text],select {
+	font-family: "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
+}
+
+#options ul {
+	overflow: hidden;
+	margin-left: 96px;
+}
+
+table,table td {
+	border: 1px solid #cccccc;
+	border-collapse: collapse;
+}
+
+table td{
+    padding: 3px 5px;
+}
+
+.multi_button{
+    padding: 1px 4px;
+    cursor: pointer;
+    color: #FFF;
+    display: inline-block;
+}
+
+.multi_button.add{
+    color: #000;
+    background-color: #ACDAF4;
+    margin: 2px;
+}
+
+.multi_button.add:hover{
+    background-color: #0072DB;
+    color: #FFF;
+}
+
+.multi_button.del{
+    color: #000;
+    background-color: #FFDAF4;
+}
+
+.multi_button.del:hover{
+    background-color: red;
+    color: #FFF;
+}
+
+/*Edit中的iFrame*/
+#view {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	width: 800px;
+	margin-left: -400px;
+	height: 400px;
+	overflow: hidden;
+	background-color: #EEFCFF;
+	border: 1px solid #CDCDCD;
+	box-shadow: 4px 2px 6px #CDCDCD;
+	-webkit-box-shadow: 4px 2px 6px #CDCDCD;
+	-moz-box-shadow: 4px 2px 6px #CDCDCD;
+	display: none;
+}
+
+#close {
+	border-color: red;
+	border-style: none none solid solid;
+	border-width: 0 0 2px 2px;
+	font-size: 20px;
+	padding: 2px 8px;
+	position: absolute;
+	right: 73px;
+	top: 10%;
+	z-index: 2;
+	cursor: pointer;
+	color: white;
+	background-color: red;
+	opacity: 0.4;
+	display: none;
+}
+
+#close:hover {
+	opacity: 1.0;
+}
