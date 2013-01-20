@@ -69,9 +69,9 @@ public class CodeGenAction extends ActionSupport{
     	Document document = (Document) ActionContext.getContext().getSession().get("domain");
     	
     	System.out.println("---------------解析domain.xml到元数据中-------------");
-        //获取根节点tables
+        //获取根节点domains
         Element root = document.getRootElement();
-        //获取子节点列表table
+        //获取子节点列表domain
         @SuppressWarnings("unchecked")
 		List<Element> domains = root.elements("domain");
         for (Element domain : domains) {
@@ -82,7 +82,7 @@ public class CodeGenAction extends ActionSupport{
             DomainPo domainPo = new DomainPo(domainName, domainCnName, propertyPos);
             boolean isRefUserflag = false;
             
-            //遍历columns
+            //遍历properties
             @SuppressWarnings("unchecked")
 			List<Element> properties = domain.element("properties").elements("property");
             for (Element property : properties) {
@@ -90,6 +90,10 @@ public class CodeGenAction extends ActionSupport{
                 String propName = property.elementText("name");
                 String propCnName = property.elementText("name_cn");
                 String propType = property.elementText("type");
+                if(propType == null){
+                	//提供propType的默认值：String
+                	propType = "String";
+                }
                 PropertyPo propertyPo = new PropertyPo(propName, propCnName, propType);
                 
                 //处理是否主键/非空/唯一/集合
