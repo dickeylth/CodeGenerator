@@ -29,7 +29,10 @@
    	<constant name="struts.custom.i18n.resources" value="messageResource" />
    	
    	<!-- 文件上传临时文件夹 -->
-   	<constant name="struts.multipart.saveDir" value="/tmp"></constant>
+   	<constant name="struts.multipart.saveDir" value="/tmp"/>
+   	
+   	<!-- 动态方法调用 -->
+   	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
    	
    	<!-- struts 2 的Action必须放在指定的包空间下定义 -->
 	<!-- 定义名为strutssqs的包空间，继承struts-default(定义在struts2-core-X.X.X.X.jar/struts-default.html中) -->
@@ -49,16 +52,45 @@
 			<!-- 设置保存路径 -->
 			<param name="savePath">/upload</param>
 			<!-- 定义处理结果和视图资源之间映射关系 -->
-			<result type="redirectAction">
+			<!-- <result type="redirectAction">
 				<param name="actionName">procCodeGen</param>
 				<param name="namespace">/</param>
-			</result>
+			</result> -->
+			<result>/complete.jsp</result>
 		</action>
 		
 		<!-- 配置处理代码生成的Action -->
 		<action name="procCodeGen" class="com.codegen.action.CodeGenAction">
 			<result>/complete.jsp</result>
 			<result name="error">/error.jsp</result>
+		</action>
+	</package>
+	
+	<!-- struts 2 的Action必须放在指定的包空间下定义 -->
+	<package name="main" extends="json-default" namespace="/">
+		<action name="sysConfig" class="com.codegen.action.MainAction" method="sysConfig">
+			<result type="json" name="success"/>
+		</action>
+		
+		<action name="xmlUpload" class="com.codegen.action.MainAction" method="xmlUpload">
+			<result type="json" name="success">
+                <param name="contentType">
+                    text/html
+                </param>
+            </result>
+            <result type="json" name="error">
+                <param name="contentType">
+                    text/html
+                </param>
+            </result>
+		</action>
+		
+		<action name="codeGen" class="com.codegen.action.MainAction" method="codeGen">
+			<result type="json" name="success"/>
+		</action>
+		
+		<action name="queryProgress" class="com.codegen.action.MainAction" method="queryProgress">
+			<result type="json" name="success"/>
 		</action>
 	</package>
 </struts>

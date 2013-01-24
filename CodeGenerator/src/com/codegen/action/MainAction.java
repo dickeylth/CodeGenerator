@@ -4,12 +4,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.SessionAware;
+import org.apache.struts2.json.JSONException;
+import org.apache.struts2.json.JSONWriter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.taskdefs.Zip;
@@ -17,8 +25,13 @@ import org.apache.tools.ant.types.FileSet;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import com.codegen.domain.*;
+import com.codegen.domain.DomainPo;
+import com.codegen.domain.Message;
+import com.codegen.domain.PropertyPo;
+import com.codegen.domain.RefDomainPo;
+import com.codegen.domain.SysConfig;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -26,11 +39,22 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class CodeGenAction extends ActionSupport{
+public class MainAction extends ActionSupport implements SessionAware{
+
 	/**
-	 * 默认序列化UID
+	 * Serial Version UID
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	//Model Driven
+	private SysConfig config = new SysConfig();
+	//上传文件域
+	private File upload;
+	//上传文件类型
+	private String uploadContentType;
+	
+	//定义用于缓存数据的Session
+	private Map<String, Object> session;
 	
 	//Table元数据信息类集合
 	private List<DomainPo> domainPos = new LinkedList<DomainPo>();
@@ -39,28 +63,153 @@ public class CodeGenAction extends ActionSupport{
 	//classes路径("/D:/apache-tomcat-7.0.34/webapps/CodeGenerator/WEB-INF/classes/")
 	private String relPath = getClass().getResource("/").getPath();
 	//session中的SysConfig
-	private SysConfig sysConfig = (SysConfig) ActionContext.getContext().getSession().get("sysConfig");
-	
-	public String execute() throws Exception{
+	private SysConfig sysConfig = (SysConfig)ActionContext.getContext().getSession().get("sysConfig");
+	//定义返回前端的message
+	private String message = "";
 
-		System.out.println("--------------开始代码生成！--------------");
+	/*
+	 * 处理系统配置
+	 */
+	public String sysConfig(){
 		
-		//解析domain配置文件
-		parseDomainXml();
+		switch (config.getDbType()) {
+		case "mysql":
+			config.setDbDriver("com.mysql.jdbc.Driver");
+			config.setDbDialect("org.hibernate.dialect.MySQL5InnoDBDialect");
+			break;
+		case "oracle":
+			config.setDbDriver("oracle.jdbc.driver.OracleDriver");
+			config.setDbDialect("org.hibernate.dialect.OracleDialect");
+			break;
+		case "sqlserver":
+			config.setDbDriver("com.microsoft.jdbc.sqlserver.SQLServerDriver");
+			config.setDbDialect("org.hibernate.dialect.SQLServerDialect");
+			break;
+		default:
+			break;
+		}
+		session.put("sysConfig", config);
 		
-    	//模板组装
-    	generateTemplates();
-    	
-    	//java文件编译&处理resource资源文件，并部署到tomcat下
-    	compileCodes();
-		
-		//打包生成的文件，供下载使用
-    	zipProject();
-		
+		System.out.println(config);
 		return SUCCESS;
 	}
+	
+	/*
+	 * 处理xml上传
+	 */
+	public String xmlUpload(){
+		
+		if(getUploadContentType().equals("text/xml")){
+			SAXReader reader = new SAXReader();
+	        Document document = null;
+			try {
+				document = reader.read(getUpload());
+			} catch (DocumentException e) {
+				System.err.println(e.getLocalizedMessage());
+			}
+	        ActionContext.getContext().getSession().put("domain", document);
+		}else{
+			HttpServletResponse response =  ServletActionContext.getResponse();
+			response.setCharacterEncoding("GB2312");
+			PrintWriter writer = null;
+			try {
+				message = "您上传的文件类型不对，请上传xml类型文件！";
+				JSONWriter jsonWriter = new JSONWriter();
+				String msg = jsonWriter.write("您上传的文件类型不对，请上传xml类型文件！");
+				
+				writer = response.getWriter();
+				writer.write(msg);
+				writer.close();
+			} catch (JSONException e) {
+				System.err.println(e.getLocalizedMessage());
+			} catch (IOException e1) {
+				System.err.println(e1.getLocalizedMessage());
+			}
+		}
+        
+		return SUCCESS;
+	}
+	
 
+	/*
+	 * 处理代码生成
+	 */
+	public String codeGen() throws InterruptedException, IOException{
+		
+		Message message = new Message();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		try{
+			message.setContent(sdf.format(new Date()) + ":\t开始代码生成...");
+			session.put("msg", message);
+			
+			//解析domain配置文件
+			parseDomainXml();
+			Thread.sleep(200);
+			message.setContent(sdf.format(new Date()) + ":\t完成解析配置文件...");
+			session.put("msg", message);
+			
+	    	//模板组装
+	    	generateTemplates();
+	    	Thread.sleep(200);
+			message.setContent(sdf.format(new Date()) + ":\t完成模板与数据合并...");
+			session.put("msg", message);
+	    	
+	    	//java文件编译&处理resource资源文件，并部署到tomcat下
+	    	compileCodes();
+	    	Thread.sleep(200);
+			message.setContent(sdf.format(new Date()) + ":\t完成源代码编译与资源文件处理...");
+			session.put("msg", message);
+			
+			//打包生成的文件，供下载使用
+	    	zipProject();
+	    	Thread.sleep(200);
+			message.setContent(sdf.format(new Date()) + ":\t完成系统部署与打包...");
+			session.put("msg", message);
+			
+			Thread.sleep(2000);
+			message.setContent(sdf.format(new Date()) + ":\t生成系统初始化工作...");
+			message.setStatus(1);
+			session.put("msg", message);
+			
+		}catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+		}
+		
+		
+		return null;
+	}
+	
+	/*
+	 * 处理前端轮询
+	 */
+	public String queryProgress(){
+		
+		HttpServletResponse response =  ServletActionContext.getResponse();
+		response.setCharacterEncoding("UTF-8");
+		try {
+			PrintWriter writer = response.getWriter();
+			Message message = (Message) session.get("msg");
 
+			if(message == null){
+				message = new Message(0, "");
+			}
+			JSONWriter jsonWriter = new JSONWriter();
+			String msg = jsonWriter.write(message);
+			writer.write(msg);
+			writer.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getLocalizedMessage());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getLocalizedMessage());
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * 解析domain.xml到表元数据的domain中
 	 * @throws DocumentException
@@ -170,7 +319,7 @@ public class CodeGenAction extends ActionSupport{
     	//Freemarker初始化工作
     	Configuration conf = new Configuration();
     	File baseDir = new File(relPath + "templates");
-    	System.out.println(relPath + "templates");
+    	//System.out.println(relPath + "templates");
     	conf.setDirectoryForTemplateLoading(baseDir);
     	
     	
@@ -240,6 +389,8 @@ public class CodeGenAction extends ActionSupport{
 			procLoopGene(path, template, root);
 			
 		}
+    	
+    	System.out.println("-------------模板文件合并处理完毕--------------------");
     }
     
     /**
@@ -257,6 +408,7 @@ public class CodeGenAction extends ActionSupport{
     	
     	try{
     		project.executeTarget(project.getDefaultTarget());
+    		System.out.println("---------------代码编译-----------------");
     	}catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 		}
@@ -278,7 +430,8 @@ public class CodeGenAction extends ActionSupport{
     	zip.addFileset(fileSet);
     	
     	try {
-        	zip.execute();			
+        	zip.execute();
+        	System.out.println("-------------------项目文件打包-----------------");
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 		}
@@ -309,5 +462,43 @@ public class CodeGenAction extends ActionSupport{
 			e.printStackTrace();
 		}
     }
-    
+	
+
+	//Getters & Setters
+	public SysConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(SysConfig config) {
+		this.config = config;
+	}
+
+	public File getUpload() {
+		return upload;
+	}
+
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+
+	public String getUploadContentType() {
+		return uploadContentType;
+	}
+
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+
+	@Override
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

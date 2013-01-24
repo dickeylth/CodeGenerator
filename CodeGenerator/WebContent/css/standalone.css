@@ -1,0 +1,67 @@
+body {
+    padding-top: 50px;
+    font-family:"Lucida Grande","bitstream vera sans","trebuchet ms",sans-serif,verdana;
+}
+
+/* get rid of those system borders being generated for A tags */
+a:active {
+    outline:none;
+}
+
+:focus {
+    -moz-outline-style:none;
+}
+
+#progress{
+    background-color: #456;
+    color: #BBB;
+    padding: 10px;
+    width: 480px;
+    float: left;
+}
+
+#wrap{
+    width: 500px;
+    overflow: hidden;
+}
+
+#display{
+    width: 1000px;
+    position: relative;
+}
+
+#finish{
+    width: 500px;
+    float: left;
+}
+
+#finish h3{
+    text-align: center;
+    padding: 10px;
+}
+
+a.target {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    background-image: -webkit-linear-gradient(#2da1ec, #0191d9);
+    background-image: -moz-linear-gradient(#2da1ec, #0191d9);
+    background-image: -ms-linear-gradient(#2da1ec, #0191d9);
+    background-image: linear-gradient(#2da1ec, #0191d9));
+    border: 1px solid #0082c3;
+    text-decoration: none;
+}
+
+a.target:hover {
+    background-image: -webkit-linear-gradient(#2eacff, #0191d9);
+    background-image: -moz-linear-gradient(#2eacff, #0191d9);
+    background-image: -ms-linear-gradient(#2eacff, #0191d9);
+    background-image: linear-gradient(#2eacff, #0191d9);
+}
+
+a.target:active {
+    top: 1px;
+}

@@ -4,7 +4,7 @@ public class SysConfig {
 	//系统中文名
 	private String sysName;
 	//系统英文名
-	private String sysPackage;
+	private String sysPackage = "AutoGenerate";
 	//数据库类型
 	private String dbType;
 	//数据库URL
