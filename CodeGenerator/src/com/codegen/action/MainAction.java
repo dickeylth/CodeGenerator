@@ -226,9 +226,10 @@ public class MainAction extends ActionSupport implements SessionAware{
         for (Element domain : domains) {
             String domainName = (String) domain.elementText("name");
             String domainCnName = (String) domain.elementText("name_cn");
+            String processName = (String) domain.elementText("process_name");
             
             List<PropertyPo> propertyPos = new LinkedList<PropertyPo>();
-            DomainPo domainPo = new DomainPo(domainName, domainCnName, propertyPos);
+            DomainPo domainPo = new DomainPo(domainName, domainCnName, processName, propertyPos);
             boolean isRefUserflag = false;
             
             //遍历properties
@@ -358,6 +359,10 @@ public class MainAction extends ActionSupport implements SessionAware{
         	root.remove("domain");
 		}
     	
+    	//处理业务-流程关联文件
+    	Template processTemplate = conf.getTemplate("BizWorkflow.ftl");
+    	procLoopGene(srcPath + "domain/BizWorkflow.java", processTemplate, root);
+    	
     	root.put("domains", this.domainPos);
     	Map<String, String> path_template = new HashMap<String, String>(){
 			private static final long serialVersionUID = 1L;{
@@ -447,11 +452,11 @@ public class MainAction extends ActionSupport implements SessionAware{
     private void procLoopGene(String path, Template t, Map<String, Object> root){
     	//根据pkg和path组装目标代码路径
     	File f = new File(relPath + "../../target/" + path);
-    	System.out.println(relPath + "../../target/" + path);
+    	//System.out.println(relPath + "../../target/" + path);
 		try {
 			f.getParentFile().mkdirs();
 			f.createNewFile();
-			System.out.println("创建文件！" + f.getAbsolutePath());
+			System.out.println("创建文件：" + f.getAbsolutePath() + "...");
 			BufferedWriter writer;
 			writer = new BufferedWriter(new FileWriter(f));
 			t.process(root, writer);

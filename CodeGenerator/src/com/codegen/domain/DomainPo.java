@@ -19,6 +19,8 @@ public class DomainPo {
     private String cnName;
     //映射类是否与User相关联
     private boolean userRelated = false;
+    //映射类关联的流程名
+    private String processName;
     //映射类的属性集合
     private List<PropertyPo> properties = new LinkedList<PropertyPo>();
 
@@ -54,6 +56,14 @@ public class DomainPo {
 		this.userRelated = userRelated;
 	}
 	
+	public String getProcessName() {
+		return processName;
+	}
+
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
+
 	//获取该domain下的基本类型字段&多对一&一对一映射字段（排除User），在edit页面
 	public String getDisplayFields(){
 		String ret = "";
@@ -84,17 +94,19 @@ public class DomainPo {
 		return propList;
 	}
 	
-	public DomainPo(String name, String cnName, List<PropertyPo> properties) {
+	public DomainPo(String name, String cnName, String processName, List<PropertyPo> properties) {
 		super();
 		this.name = name;
 		this.cnName = cnName;
+		this.processName = processName;
 		this.properties = properties;
 	}
 
 	@Override
 	public String toString() {
 		return "DomainPo [name=" + name + ", cnName=" + cnName
-				+ ", isUserRelated=" + userRelated + ", properties="
-				+ properties + "]";
+				+ ", isUserRelated=" + userRelated 
+				+ ", processName=" + processName 
+				+ ", properties=" + properties + "]";
 	}
 }

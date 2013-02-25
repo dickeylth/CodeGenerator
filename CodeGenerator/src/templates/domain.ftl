@@ -6,11 +6,14 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.util.Date;
+<#if domain.name != "Role">
+import org.jbpm.api.identity.Group;
+</#if>
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class ${domain.name} implements Serializable {
+public class ${domain.name} implements Serializable<#if domain.name != "Role">, Group</#if> {
 
 	/**
 	 * serialVersionUID
@@ -23,8 +26,10 @@ public class ${domain.name} implements Serializable {
 	<#if property.pk = true>
 	//主键
 	@Id
+		<#if domain.name != "Role">
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
+		</#if>
 	private String id;
 	<#-- 如果有关联类，表明非基本数据类型 -->
 	<#elseif property.refDomainPo??>
@@ -63,8 +68,13 @@ public class ${domain.name} implements Serializable {
 	private ${property.type} ${property.name};
 		</#if>
 	</#if>
-	
 	</#list>
+	
+	<#if domain.processName != null>
+	//流程状态
+	@OneToOne(cascade = CascadeType.ALL)
+	private BizWorkflow bizWorkflow;
+	</#if>
 	
 	<#-- 定义各属性Getter & Setter -->
 	<#list domain.properties as property>
@@ -86,4 +96,27 @@ public class ${domain.name} implements Serializable {
 	}	
 		</#if>
 	</#list>
+	
+	<#if domain.processName != null>
+	public BizWorkflow getBizWorkflow() {
+		return bizWorkflow;
+	}
+
+	public void setBizWorkflow(BizWorkflow bizWorkflow) {
+		this.bizWorkflow = bizWorkflow;
+	}
+	</#if>
+	
+	<#-- 由于角色需要与jbpm用户体系整合，需要对Role类进行定制 -->
+	<#if domain.name != "Role">
+	@Override
+	public String getName() {
+		return rolename;
+	}
+
+	@Override
+	public String getType() {
+		return "candidate";
+	}
+	</#if>
 }
