@@ -33,38 +33,6 @@
    	
    	<!-- 动态方法调用 -->
    	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
-   	
-   	<!-- struts 2 的Action必须放在指定的包空间下定义 -->
-	<!-- 定义名为strutssqs的包空间，继承struts-default(定义在struts2-core-X.X.X.X.jar/struts-default.html中) -->
-	<package name="procGen" extends="struts-default" namespace="/">
-		<!-- 处理数据库配置 -->
-		<action name="dbConfig" class="com.codegen.action.DbConfigAction">
-			<!-- 定义处理结果和视图资源之间映射关系 -->
-			<result name="input">/index.jsp</result>
-			<result name="error">/error.jsp</result>
-			<result name="success">/domain.jsp</result>
-		</action>
-
-		<!-- 处理数据库设计XML文件 -->
-		<action name="domainXmlUpload" class="com.codegen.action.UploadAction">
-			<!-- 设置文件名 -->
-			<param name="fileName">domain.xml</param>
-			<!-- 设置保存路径 -->
-			<param name="savePath">/upload</param>
-			<!-- 定义处理结果和视图资源之间映射关系 -->
-			<!-- <result type="redirectAction">
-				<param name="actionName">procCodeGen</param>
-				<param name="namespace">/</param>
-			</result> -->
-			<result>/complete.jsp</result>
-		</action>
-		
-		<!-- 配置处理代码生成的Action -->
-		<action name="procCodeGen" class="com.codegen.action.CodeGenAction">
-			<result>/complete.jsp</result>
-			<result name="error">/error.jsp</result>
-		</action>
-	</package>
 	
 	<!-- struts 2 的Action必须放在指定的包空间下定义 -->
 	<package name="main" extends="json-default" namespace="/">
