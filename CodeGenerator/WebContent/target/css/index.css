@@ -2,7 +2,7 @@ body {
 	font: normal 13px "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
 	color: #666;
 	background: url(../img/background.jpg) no-repeat center top #EEFCFF;
-	margin: 50px 200px 0px 200px;
+	margin: 50px 240px 0px 240px;
 }
 
 ul {
@@ -30,7 +30,6 @@ nav {
 	width: 100%;
 	height: 45px;
 	background-color: #0491c7;
-	border: 1px solid #456;
 	position: relative;
 }
 
@@ -52,13 +51,16 @@ nav li a {
 	transition: 0.5s;
 }
 
-li:hover,li:hover a,.sysadmin li:hover a,a.on {
+li:hover,li:hover a,.sysadmin li:hover a{
 	background-color: #ACDAF4;
 	color: #0072DB;
 }
 
 a.on{
-    background-color: #FAFAFA;
+	color: #0072DB;
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#ACDAF4), to(#eefbff));
+    background:-moz-linear-gradient(top, #ACDAF4, #eefbff);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ACDAF4,endcolorstr=#eefbff,gradientType=0);
 }
 
 .adminli {
@@ -72,7 +74,7 @@ a.on{
 .sysadmin {
 	position: absolute;
 	overflow: hidden;
-	top: 46px;
+	top: 45px;
 	left: 0;
 	z-index: 2;
 	display: none;
@@ -105,6 +107,10 @@ li:hover .sysadmin li {
 	transition: background-color 0.5s ease, color 0.3s ease-out;
 	background-color: #0491c7;
 	font-size: 14px;
+}
+
+.sysadmin li a.on{
+	color: #0072DB;
 }
 
 .greet {

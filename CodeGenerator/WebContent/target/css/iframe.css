@@ -1,8 +1,108 @@
 body {
 	font: normal 13px "微软雅黑", 'Microsoft Yahei', Arial, Tahoma;
 	color: #666;
-	margin: 50px 20px 0px 20px;
+	/*margin: 50px 20px 0px 20px;*/
 	text-align: center;
+	margin: 0 auto;
+}
+
+/*导航栏*/
+.breadcrumb {
+	background-color: #F4F3F2;
+	border: 1px solid #9B9B9B;
+	border-left: 0;
+	border-right:0;
+	height: 33px;
+	font-size: 14px;
+}
+
+li:hover,li:hover a,.sysadmin li:hover a,a.on {
+	background-color: #ACDAF4;
+	color: #0072DB;
+}
+
+a.on{
+    background-color: #FAFAFA;
+}
+
+.adminli {
+	position: relative;
+	width: 80px;
+	display: inline;
+	float: left;
+}
+
+.adminli>a{
+	text-decoration: none;
+	cursor: pointer;
+	display: block;
+	padding: 7px;
+}
+
+.adminli>a.back{
+	background: url(../img/back.png) no-repeat fixed 10px 9px;
+	padding-left: 16px;
+}
+
+.adminli:hover{
+	background-color: #ACDAF4;
+}
+
+.adminli:hover .sysadmin {
+	display: block;
+}
+
+.breaditem{
+	float: left;
+	padding: 7px;
+}
+
+.sysadmin {
+	position: absolute;
+	overflow: hidden;
+	top: 33px;
+	left: 0px;
+	z-index: 2;
+	display: none;
+	opacity: 0.9;
+	margin: 0;
+	padding: 0;
+}
+
+.sysadmin li {
+	-moz-transition-delay: 0s;
+	-o-transition-delay: 0s;
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	position: relative;
+}
+
+li:hover .sysadmin li {
+	opacity: 1;
+	-moz-transition-delay: 0.3s;
+	-o-transition-delay: 0.3s;
+	-webkit-transition-delay: 0.3s;
+	transition-delay: 0.3s;
+}
+
+.sysadmin li a {
+	border-color: #6E67A6;
+	color: #e1f2f5;
+	-moz-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-o-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-webkit-transition: background-color 0.5s ease, color 0.3s ease-out;
+	-ms-transition: background-color 0.5s ease, color 0.3s ease-out;
+	transition: background-color 0.5s ease, color 0.3s ease-out;
+	background-color: #0491c7;
+	font-size: 12px;
+	text-decoration: none;
+	font-weight: 500;
+	display: block;
+	padding: 8px 16px;
+	-moz-transition: 0.5s;
+	-o-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	transition: 0.5s;
 }
 
 ul {
@@ -137,19 +237,18 @@ table td{
 	border-color: red;
 	border-style: none none solid solid;
 	border-width: 0 0 2px 2px;
-	font-size: 20px;
+	font-size: 18px;
 	padding: 2px 8px;
 	position: absolute;
-	right: 73px;
+	right: 70px;
 	top: 10%;
 	z-index: 2;
 	cursor: pointer;
-	color: white;
-	background-color: red;
-	opacity: 0.4;
+	color: red;
 	display: none;
 }
 
 #close:hover {
-	opacity: 1.0;
+	background-color: red;
+	color: white;
 }

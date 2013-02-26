@@ -2,6 +2,9 @@ package com.codegen.action;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,9 +52,11 @@ public class MainAction extends ActionSupport implements SessionAware{
 	//Model Driven
 	private SysConfig config = new SysConfig();
 	//上传文件域
-	private File upload;
+	private File Filedata;
+	//上传文件名
+	private String FiledataFileName;
 	//上传文件类型
-	private String uploadContentType;
+	//private List<String> FiledataContentType;
 	
 	//定义用于缓存数据的Session
 	private Map<String, Object> session;
@@ -95,38 +100,54 @@ public class MainAction extends ActionSupport implements SessionAware{
 	}
 	
 	/*
-	 * 处理xml上传
+	 * 处理domain.xml上传
 	 */
 	public String xmlUpload(){
-		
-		if(getUploadContentType().equals("text/xml")){
-			SAXReader reader = new SAXReader();
-	        Document document = null;
-			try {
-				document = reader.read(getUpload());
-			} catch (DocumentException e) {
-				System.err.println(e.getLocalizedMessage());
-			}
-	        ActionContext.getContext().getSession().put("domain", document);
-		}else{
-			HttpServletResponse response =  ServletActionContext.getResponse();
-			response.setCharacterEncoding("GB2312");
-			PrintWriter writer = null;
-			try {
-				message = "您上传的文件类型不对，请上传xml类型文件！";
-				JSONWriter jsonWriter = new JSONWriter();
-				String msg = jsonWriter.write("您上传的文件类型不对，请上传xml类型文件！");
-				
-				writer = response.getWriter();
-				writer.write(msg);
-				writer.close();
-			} catch (JSONException e) {
-				System.err.println(e.getLocalizedMessage());
-			} catch (IOException e1) {
-				System.err.println(e1.getLocalizedMessage());
-			}
+		SAXReader reader = new SAXReader();
+        Document document = null;
+		try {
+			System.out.println("DomainXml: " + getFiledata());
+			document = reader.read(getFiledata());
+		} catch (DocumentException e) {
+			System.err.println(e.getLocalizedMessage());
 		}
+		System.out.println(document);
+        ActionContext.getContext().getSession().put("domain", document);
         
+		return SUCCESS;
+	}
+	
+	/*
+	 * 处理*.jpdl.xml文件上传
+	 */
+	public String jpdlUpload(){
+		File targetDir = new File(relPath + "../../target/WEB-INF/src/jpdl/");
+		if(!targetDir.exists()){
+			targetDir.mkdirs();
+		}
+		try {
+			File target = new File(relPath + "../../target/WEB-INF/src/jpdl/" + getFiledataFileName());
+			if(!target.exists()){
+				target.createNewFile();
+			}
+			FileOutputStream fos = new FileOutputStream(target);
+			FileInputStream fis = new FileInputStream(getFiledata());
+			
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) > 0){
+				fos.write(buffer, 0, len);
+			}
+			fos.close();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return SUCCESS;
 	}
 	
@@ -302,7 +323,7 @@ public class MainAction extends ActionSupport implements SessionAware{
                 
             }
             domainPo.setUserRelated(isRefUserflag);
-            //System.out.println(domainPo);
+            System.out.println(domainPo);
             domainPos.add(domainPo);
         }
         System.out.println("--------------domain.xml解析完毕----------------");
@@ -348,6 +369,11 @@ public class MainAction extends ActionSupport implements SessionAware{
         		//处理domain_index模板
         		put(domainPo.getName() + "/index.jsp", "domain_index.ftl");
         	}};
+        	
+        	if(domainPo.getProcessName() != null && !domainPo.getProcessName().trim().equals("")){
+        		path_template.put(domainPo.getName() + "/task.jsp", "domain_task.ftl");
+        		path_template.put(domainPo.getName() + "/hist.jsp", "domain_hist.ftl");
+        	}
     		
         	for ( Map.Entry<String, String> entry : path_template.entrySet()) {
 				String path = entry.getKey();
@@ -359,10 +385,6 @@ public class MainAction extends ActionSupport implements SessionAware{
         	root.remove("domain");
 		}
     	
-    	//处理业务-流程关联文件
-    	Template processTemplate = conf.getTemplate("BizWorkflow.ftl");
-    	procLoopGene(srcPath + "domain/BizWorkflow.java", processTemplate, root);
-    	
     	root.put("domains", this.domainPos);
     	Map<String, String> path_template = new HashMap<String, String>(){
 			private static final long serialVersionUID = 1L;{
@@ -372,8 +394,8 @@ public class MainAction extends ActionSupport implements SessionAware{
     		put(srcPath + "service/impl/UserServiceImpl.java", "serviceImpl.ftl");
     		//处理BaseAction模板
     		put(srcPath + "action/base/BaseAction.java", "baseAction.ftl");
-    		//处理DatabaseInit模板
-    		put("WEB-INF/src/DatabaseInit.java", "DatabaseInit.ftl");
+    		//处理SystemInit模板
+    		put("WEB-INF/src/SystemInit.java", "SystemInit.ftl");
     		//处理struts.xml模板
     		put("WEB-INF/classes/struts.xml", "struts.ftl");
     		//处理resource模板
@@ -382,8 +404,16 @@ public class MainAction extends ActionSupport implements SessionAware{
     		put("WEB-INF/applicationContext.xml", "applicationContext.ftl");
     		//处理index.jsp模板
     		put("index.jsp", "index.ftl");
-    		//处理index.jsp模板
+    		//处理ShiroAuthFilter.java模板
     		put(srcPath + "security/ShiroAuthFilter.java", "shiro.ftl");
+    		//处理业务-流程关联类
+    		put(srcPath + "domain/BizWorkflow.java", "BizWorkflow.ftl");
+    		//处理流程中jbpm用户体系与角色整合UserSession.java模板
+    		put(srcPath + "jbpm/UserSession.java", "UserSession.ftl");
+    		//处理流程中jbpm配置文件jbpm.cfg.xml
+    		put("WEB-INF/src/jbpm.cfg.xml.ftl", "jbpm.cfg.ftl");
+    		//处理流程中jbpm配置文件jbpm.identity.cfg.xml
+    		put("WEB-INF/src/jbpm.identity.cfg.xml", "jbpm.identity.cfg.ftl");
     	}};
     	for ( Map.Entry<String, String> entry : path_template.entrySet()) {
     		
@@ -396,6 +426,31 @@ public class MainAction extends ActionSupport implements SessionAware{
 		}
     	
     	System.out.println("-------------模板文件合并处理完毕--------------------");
+    }
+    
+    /**
+     * 处理循环生成代码
+     * @param path 路径名
+     * @param t 模板
+     * @param root 根对象
+     */
+    private void procLoopGene(String path, Template t, Map<String, Object> root){
+    	//根据pkg和path组装目标代码路径
+    	File f = new File(relPath + "../../target/" + path);
+    	//System.out.println(relPath + "../../target/" + path);
+		try {
+			f.getParentFile().mkdirs();
+			f.createNewFile();
+			System.out.println("创建文件：" + f.getAbsolutePath() + "...");
+			BufferedWriter writer;
+			writer = new BufferedWriter(new FileWriter(f));
+			t.process(root, writer);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -442,31 +497,7 @@ public class MainAction extends ActionSupport implements SessionAware{
 		}
 
     }
-    
-    /**
-     * 处理循环生成代码
-     * @param path 路径名
-     * @param t 模板
-     * @param root 根对象
-     */
-    private void procLoopGene(String path, Template t, Map<String, Object> root){
-    	//根据pkg和path组装目标代码路径
-    	File f = new File(relPath + "../../target/" + path);
-    	//System.out.println(relPath + "../../target/" + path);
-		try {
-			f.getParentFile().mkdirs();
-			f.createNewFile();
-			System.out.println("创建文件：" + f.getAbsolutePath() + "...");
-			BufferedWriter writer;
-			writer = new BufferedWriter(new FileWriter(f));
-			t.process(root, writer);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			e.printStackTrace();
-		}
-    }
+
 	
 
 	//Getters & Setters
@@ -478,20 +509,20 @@ public class MainAction extends ActionSupport implements SessionAware{
 		this.config = config;
 	}
 
-	public File getUpload() {
-		return upload;
+	public File getFiledata() {
+		return Filedata;
 	}
 
-	public void setUpload(File upload) {
-		this.upload = upload;
+	public void setFiledata(File filedata) {
+		this.Filedata = filedata;
 	}
 
-	public String getUploadContentType() {
-		return uploadContentType;
+	public String getFiledataFileName() {
+		return FiledataFileName;
 	}
 
-	public void setUploadContentType(String uploadContentType) {
-		this.uploadContentType = uploadContentType;
+	public void setFiledataFileName(String FiledataFileName) {
+		this.FiledataFileName = FiledataFileName;
 	}
 
 	@Override

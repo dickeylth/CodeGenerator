@@ -57,7 +57,7 @@
 	
 	<!-- 系统初始化 -->
 	 <listener>
- 		<listener-class>DatabaseInit</listener-class>
+ 		<listener-class>SystemInit</listener-class>
  	</listener>
 
 </web-app>

@@ -8,6 +8,7 @@
 	<link rel="shortcut icon" href="img/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="css/standalone.css"/>
 	<link rel="stylesheet" type="text/css" href="css/scrollable-wizard.css"/>
+	<link rel="stylesheet" type="text/css" href="css/GooUploader.css"/>
 	<!-- a little more standalone page styling 
 	<style>
 	  body {
@@ -18,6 +19,8 @@
 	-->
 	<script src="js/jquery.tools.min.js"></script>
 	<script src="js/ajaxfileupload.js"></script>
+	<script src="js/GooUploader.js"></script>
+	<script src="js/swfupload.js"></script>
 </head>
 <body>
 <div id="drawer">
@@ -28,7 +31,8 @@
    <ul id="status">
      <li class="active"><strong>1.</strong> 项目&amp;环境信息</li>
      <li><strong>2.</strong> 业务模型</li>
-     <li><strong>3.</strong> 完成</li>
+     <li><strong>3.</strong> 流程定义</li>
+     <li><strong>4.</strong> 创建系统</li>
    </ul>
    <div class="items">
      <!-- page1 -->
@@ -100,26 +104,51 @@
 		  <!-- domain.xml -->
 		  <li class="required">
 		    <label>上传模型定义xml文件 <span>*</span><br />
-		      <input type="file" class="file" name="upload" id="upload"/>
 		    </label>
+		    <div id="domainXml"/></div>
 		  </li>
 	
 		  <li class="clearfix">
 		    <button type="button" class="prev" style="float:left">
 	              &laquo; 上一步
 	            </button>
-		    <button type="button" class="next right" data-action="xmlUpload.do" id="xmlUploadSubmit">
+		    <button type="button" class="next right">
 	              下一步 &raquo;
 	            </button>
 		  </li>
 		</ul>
 	</form>
     </div>
-
+    
     <!-- page3 -->
     <div class="page">
+	<h2>
+	  <strong>第三步: </strong> 导入流程定义jpdl文件 <b></b>
+	</h2>
+	<form action="#" enctype="multipart/form-data" method="post">
+		<ul>
+		  <!-- domain.xml -->
+		  <li class="required">
+		    <label>上传流程定义jpdl.xml文件 <span>*</span><br /></label>
+		    <div id="processXml"/></div>
+		  </li>
+	
+		  <li class="clearfix">
+		    <button type="button" class="prev" style="float:left">
+	              &laquo; 上一步
+	            </button>
+		    <button type="button" class="next right" id="build">
+	              创建系统 &raquo;
+	            </button>
+		  </li>
+		</ul>
+	</form>
+    </div>
+
+    <!-- page4 -->
+    <div class="page">
 		<h2>
-		  <strong>第三步: </strong> 系统创建 <b></b>
+		  <strong> 开始系统创建 </strong><b></b>
 		</h2>
 		<div id="wrap">
 			<div id="display">
@@ -189,6 +218,43 @@ $(function() {
 		    $(this).click();
 		}
     });
+	var post_params = {session_id: "<%=session.getId()%>"};
+	$.createGooUploader($("#domainXml"),{
+		width: 500,
+		height: 300,
+		multiple: false,
+		file_types: "*.xml",
+	    file_types_description: "流程定义文件*.jpdl.xml",
+	    btn_add_text: "添加",
+	    btn_up_text: "上传",
+	    btn_cancel_text: "放弃",
+	    btn_clean_text: "清空",
+	    op_del_text: "单项删除",
+	    op_up_text: "单项上传",
+	    op_fail_text: "上传失败",
+	    op_ok_text: "上传成功",
+	    op_no_text: "取消上传",
+	    flash_url: "js/swfupload.swf",
+		upload_url: "xmlUpload.do"
+	});
+	$.createGooUploader($("#processXml"),{
+		width: 500,
+		height: 300,
+		multiple: true,
+		file_types: "*.xml",
+	    file_types_description: "流程定义文件*.jpdl.xml",
+	    btn_add_text: "添加",
+	    btn_up_text: "上传",
+	    btn_cancel_text: "放弃",
+	    btn_clean_text: "清空",
+	    op_del_text: "单项删除",
+	    op_up_text: "单项上传",
+	    op_fail_text: "上传失败",
+	    op_ok_text: "上传成功",
+	    op_no_text: "取消上传",
+	    flash_url: "js/swfupload.swf",
+		upload_url: "jpdlUpload.do"
+	});
 	
 	$('#sysConfigSubmit').click(function(e){
 		if(drawer.data('state') == 'success'){
@@ -204,26 +270,21 @@ $(function() {
 		}
 	});
 	
-	$('#xmlUploadSubmit').click(function(e){
-		if(drawer.data('state') == 'success'){
-			$.ajaxFileUpload({
-			  url:$(this).data('action'),			//服务器端程序
-			  secureuri:false,
-			  fileElementId:'upload',					//input框的ID
-			  dataType: 'json',//返回数据类型
-			  success: function (ret, status){ 	//服务器成功响应处理函数
-                  console.log(ret);				//从服务器返回的json中取出message中的数据, 其中message为在struts2中action中定义的成员变量
-                  if(ret.message != ''){
-                	  alert(ret.message);
-                  }else{
-                	  callback();
-                  }
-              },
-              error: function (data, status, e){//服务器响应失败处理函数
-                  alert(e);
-              }
-			});		
-		}
+	$('#build').click(function(e){
+		e.preventDefault();
+		$.ajax(
+			'codeGen.do',
+			{
+				data: '',
+				beforeSend: function(xhr, settings){
+					query(xhr);
+				},
+				success: function(data, textStatus, jqXHR){
+					setTimeout("$('#display').animate({left:'-=500'}, 'slow');", 10000);
+					return;
+				}
+			}
+		);
 	});
 	
 	function query(){
@@ -239,22 +300,6 @@ $(function() {
 				}
 			}
 		);	
-	}
-	
-	function callback(){
-		$.ajax(
-			'codeGen.do',
-			{
-				data: '',
-				beforeSend: function(xhr, settings){
-					query(xhr);
-				},
-				success: function(data, textStatus, jqXHR){
-					setTimeout("$('#display').animate({left:'-=500'}, 'slow');", 10000);
-					return;
-				}
-			}
-		);
 	}
 
 });

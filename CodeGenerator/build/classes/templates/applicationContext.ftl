@@ -70,8 +70,12 @@
 		<#list domains as domain>
 		p:${domain.name?uncap_first}Dao-ref="${domain.name?uncap_first}Dao" 
 		</#list>
+		p:repositoryService-ref="repositoryService"
+		p:executionService-ref="executionService"
+		p:taskService-ref="taskService"
+		p:historyService-ref="historyService"
 	/>
-
+	<bean id="userSession" class="${package}.jbpm.UserSession" p:userDao-ref="userDao"/>
 
 	<!-- Shiro的配置信息 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -132,5 +136,14 @@
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 
+	<!--jbpm4.4工作流  -->
+	<bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper" lazy-init="default" autowire="default">
+		<property name="jbpmCfg" value="jbpm.cfg.xml" />
+	</bean>
+	<bean id="processEngine" factory-bean="springHelper"  factory-method="createProcessEngine" />
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+	<bean id="executionService" factory-bean="processEngine" factory-method="getExecutionService" />
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
 
 </beans>

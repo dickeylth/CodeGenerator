@@ -9,6 +9,11 @@
 	<link rel="stylesheet" href="css/iframe.css" />
 </head>
 <body style="display: none">
+	<div class="breadcrumb">
+		<div class="adminli">
+			<a href="javascript:history.back();" class="back">返回</a>
+		</div>
+	</div>
 	<h3>
 		<#noparse>${title}</#noparse><s:text name="${domain.name?uncap_first}"/>
 	</h3>
@@ -70,8 +75,13 @@
 				</#if>
 			</#if>
 		</#list>
-		
+		<#if domain.processName != null>
+		<s:if test="model.id == null || model.bizWorkflow.step == 0">
+			<s:submit id="submit" key="submit" cssClass="button" />
+		</s:if>
+		<#else>
 		<s:submit id="submit" key="submit" cssClass="button" />
+		</#if>
 	</s:form>
 	<iframe src="" name="view" id="view"></iframe>
 	<a id="close">×</a>

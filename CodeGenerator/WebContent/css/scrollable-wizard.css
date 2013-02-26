@@ -83,13 +83,6 @@
     letter-spacing:1px;
 }
 
-.file{
-    width:100%;
-    padding-bottom: 50px;
-    color:#456;
-    letter-spacing:1px;
-}
-
 #wizard select {
     border:1px solid #ccc;
     width:94%;

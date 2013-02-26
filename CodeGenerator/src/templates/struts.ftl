@@ -29,6 +29,8 @@
 		<action name="*_*Action" class="${package}.action.{1}Action"
 			method="{2}">
 			<result name="input">{1}/edit.jsp</result>
+			<result name="task">{1}/task.jsp</result>
+			<result name="hist">{1}/hist.jsp</result>
 			<result>{1}/index.jsp</result>
 		</action>
 

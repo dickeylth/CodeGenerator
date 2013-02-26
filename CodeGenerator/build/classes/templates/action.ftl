@@ -1,9 +1,17 @@
 package ${package}.action;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+<#if domain.processName != null>
+import org.jbpm.api.history.HistoryTask;
+import org.jbpm.api.task.Task;
+</#if>
+
 
 import ${package}.action.base.BaseAction;
 import ${package}.domain.*;
@@ -78,6 +86,46 @@ public class ${domain.name}Action extends BaseAction{
 		return SUCCESS;
 	}
 	
+	<#if domain.processName != null>
+	/*
+	 * 查询流程任务
+	 */
+	public String queryTask(){
+		initQuery();
+		//遍历业务表，为各业务entry设置taskId，以传给后续审批用
+		List<${domain.name}> ${domain.name?uncap_first}s = new LinkedList<${domain.name}>();
+		Map<String, Task> tasks = userService.getTaskList("${domain.name}", user);
+		Iterator<Entry<String, Task>> iterator = tasks.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, Task> entry = (Map.Entry<String, Task>) iterator.next();
+			${domain.name} ${domain.name?uncap_first} = userService.find${domain.name}(entry.getKey());
+			${domain.name?uncap_first}.getBizWorkflow().setTaskId(entry.getValue().getId());
+			${domain.name?uncap_first}s.add(${domain.name?uncap_first});
+		}
+		setModels(${domain.name?uncap_first}s);
+		return "task";
+	}
+	
+	/*
+	 * 查询流程历史任务
+	 */
+	public String queryHist(){
+		initQuery();
+		//遍历业务表，为各业务entry设置taskId，以传给后续审批用
+		List<${domain.name}> ${domain.name?uncap_first}s = new LinkedList<${domain.name}>();
+		Map<String, HistoryTask> tasks = userService.getHistTaskList(user);
+		Iterator<Entry<String, HistoryTask>> iterator = tasks.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, HistoryTask> entry = (Map.Entry<String, HistoryTask>) iterator.next();
+			${domain.name} ${domain.name?uncap_first} = userService.find${domain.name}(entry.getKey());
+			${domain.name?uncap_first}.getBizWorkflow().setTaskId(entry.getValue().getId());
+			${domain.name?uncap_first}s.add(${domain.name?uncap_first});
+		}
+		setModels(${domain.name?uncap_first}s);
+		return "hist";
+	}
+	</#if>
+	
 	/*
 	 * 关联查询
 	 */
@@ -119,6 +167,9 @@ public class ${domain.name}Action extends BaseAction{
 				}
 			}
 		}
+		if(model !=null && model.getBizWorkflow() != null && model.getBizWorkflow().getStep() != 0){
+			title = "查看";
+		}
 		
 		<#if domain.name = "User">
 		/**
@@ -129,6 +180,54 @@ public class ${domain.name}Action extends BaseAction{
 		
 		return INPUT;
 	}
+	
+	<#if domain.processName != null>
+	/*
+	 * 处理流程申请
+	 */
+	public String apply() throws Exception{
+		String processInstanceId = userService.procApply("${domain.processName}", "${domain.name}", id, user);
+		updateBizStatus("申请单已提交", true, processInstanceId);
+		return query();
+	}
+	
+	/*
+	 * 处理流程批准
+	 */
+	public String approve() throws Exception{
+		updateBizStatus(userService.procApprove(taskId, user), true, null);
+		return "task";
+	}
+	
+	/*
+	 * 处理流程驳回
+	 */
+	public String reject() throws Exception{
+		updateBizStatus(userService.procReject(taskId, user), false, null);
+		return "task";
+	}
+	
+	/**
+	 * 处理流程中业务数据状态更新
+	 * @param String status 状态名
+	 * @param boolean direction 审批通过？驳回
+	 * @param String processInstanceId 流程实例id，仅在申请时绑定
+	 */
+	private void updateBizStatus(String status, boolean direction, String processInstanceId){
+		${domain.name} ${domain.name?uncap_first} = userService.find${domain.name}(id);
+		${domain.name?uncap_first}.getBizWorkflow().setStatus(status);
+		if(processInstanceId != null){
+			${domain.name?uncap_first}.getBizWorkflow().setProcessInstanceId(processInstanceId);
+		}
+		
+		if(direction){
+			${domain.name?uncap_first}.getBizWorkflow().stepForward();
+		}else{
+			${domain.name?uncap_first}.getBizWorkflow().stepBackword();
+		}
+		userService.update${domain.name}(${domain.name?uncap_first});
+	}
+	</#if>
 	
 	/*
 	 * 处理增加/修改
@@ -188,14 +287,20 @@ public class ${domain.name}Action extends BaseAction{
 		//处理用户关联
 		if(model.getUser() == null){
 			model.setUser(user);
-		}		
+		}
 		</#if>
 		
 		if(model.getId().equals("")){
 			//处理新建
+			<#if domain.processName != null>
+			model.setBizWorkflow(new BizWorkflow());
+			</#if>
 			userService.add${domain.name}(model);
 		}else{
 			//处理更新
+			<#if domain.processName != null>
+			model.setBizWorkflow(userService.find${domain.name}(model.getId()).getBizWorkflow());
+			</#if>
 			userService.update${domain.name}(model);
 		}
 		return flag ? queryByRef() : query();
