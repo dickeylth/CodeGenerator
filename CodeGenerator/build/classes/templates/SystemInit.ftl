@@ -16,7 +16,7 @@ import ${package}.domain.User;
 import ${package}.service.UserService;
 
 
-public class DatabaseInit extends HttpServlet implements ServletContextListener {
+public class SystemInit extends HttpServlet implements ServletContextListener {
 
 	/**
 	 * 默认序列化UID

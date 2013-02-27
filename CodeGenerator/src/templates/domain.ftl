@@ -108,7 +108,7 @@ public class ${domain.name} implements Serializable<#if domain.name != "Role">, 
 	</#if>
 	
 	<#-- 由于角色需要与jbpm用户体系整合，需要对Role类进行定制 -->
-	<#if domain.name != "Role">
+	<#if domain.name == "Role">
 	@Override
 	public String getName() {
 		return rolename;

@@ -167,9 +167,15 @@ public class ${domain.name}Action extends BaseAction{
 				}
 			}
 		}
+		<#if domain.processName??>
 		if(model !=null && model.getBizWorkflow() != null && model.getBizWorkflow().getStep() != 0){
 			title = "查看";
 		}
+		<#else>
+		if(model !=null){
+			title = "查看";
+		}
+		</#if>
 		
 		<#if domain.name = "User">
 		/**

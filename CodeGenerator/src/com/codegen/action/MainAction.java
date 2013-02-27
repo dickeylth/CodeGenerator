@@ -102,7 +102,7 @@ public class MainAction extends ActionSupport implements SessionAware{
 	/*
 	 * 处理domain.xml上传
 	 */
-	public String xmlUpload() throws DocumentException{
+	public String xmlUpload(){
 		SAXReader reader = new SAXReader();
         Document document = null;
 		try {
@@ -112,7 +112,6 @@ public class MainAction extends ActionSupport implements SessionAware{
 		}
 
         ActionContext.getContext().getSession().put("domain", document);
-        parseDomainXml();
 		return SUCCESS;
 	}
 	
