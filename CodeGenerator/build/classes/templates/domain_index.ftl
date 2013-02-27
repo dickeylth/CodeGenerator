@@ -34,7 +34,7 @@
 		<span class="breaditem"><s:text name="permission" />管理</span>
 	</div>
 	</#if>
-	<#if domain.processName != null>
+	<#if domain.processName??>
 	<div class="breadcrumb">
 		<div class="adminli"><a href="javascript:;">${domain.cnName}管理</a>
 			<ul class="sysadmin">
@@ -67,7 +67,7 @@
 					<td><s:text name="${domain.name?uncap_first}.${property.name}" /></td>
 						</#if>
 					</#list>
-					<#if domain.processName != null>
+					<#if domain.processName??>
 					<td>状态</td>
 					<td>操作</td>
 					</#if>
@@ -88,7 +88,7 @@
 						<td><s:property value="#model.${property.name}"/></td>
 							</#if>
 						</#list>
-						<#if domain.processName != null>
+						<#if domain.processName??>
 						<td><s:property value="#model.bizWorkflow.status" /></td>
 						<td>
 							<s:if test="%{#model.bizWorkflow.step == 0}">

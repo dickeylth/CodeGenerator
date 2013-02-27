@@ -102,18 +102,17 @@ public class MainAction extends ActionSupport implements SessionAware{
 	/*
 	 * 处理domain.xml上传
 	 */
-	public String xmlUpload(){
+	public String xmlUpload() throws DocumentException{
 		SAXReader reader = new SAXReader();
         Document document = null;
 		try {
-			System.out.println("DomainXml: " + getFiledata());
 			document = reader.read(getFiledata());
 		} catch (DocumentException e) {
 			System.err.println(e.getLocalizedMessage());
 		}
-		System.out.println(document);
+
         ActionContext.getContext().getSession().put("domain", document);
-        
+        parseDomainXml();
 		return SUCCESS;
 	}
 	

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-<#if domain.processName != null>
+<#if domain.processName??>
 import org.jbpm.api.history.HistoryTask;
 import org.jbpm.api.task.Task;
 </#if>
@@ -86,7 +86,7 @@ public class ${domain.name}Action extends BaseAction{
 		return SUCCESS;
 	}
 	
-	<#if domain.processName != null>
+	<#if domain.processName??>
 	/*
 	 * 查询流程任务
 	 */
@@ -181,7 +181,7 @@ public class ${domain.name}Action extends BaseAction{
 		return INPUT;
 	}
 	
-	<#if domain.processName != null>
+	<#if domain.processName??>
 	/*
 	 * 处理流程申请
 	 */
@@ -292,13 +292,13 @@ public class ${domain.name}Action extends BaseAction{
 		
 		if(model.getId().equals("")){
 			//处理新建
-			<#if domain.processName != null>
+			<#if domain.processName??>
 			model.setBizWorkflow(new BizWorkflow());
 			</#if>
 			userService.add${domain.name}(model);
 		}else{
 			//处理更新
-			<#if domain.processName != null>
+			<#if domain.processName??>
 			model.setBizWorkflow(userService.find${domain.name}(model.getId()).getBizWorkflow());
 			</#if>
 			userService.update${domain.name}(model);

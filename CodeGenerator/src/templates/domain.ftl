@@ -70,7 +70,7 @@ public class ${domain.name} implements Serializable<#if domain.name != "Role">, 
 	</#if>
 	</#list>
 	
-	<#if domain.processName != null>
+	<#if domain.processName??>
 	//流程状态
 	@OneToOne(cascade = CascadeType.ALL)
 	private BizWorkflow bizWorkflow;
@@ -97,7 +97,7 @@ public class ${domain.name} implements Serializable<#if domain.name != "Role">, 
 		</#if>
 	</#list>
 	
-	<#if domain.processName != null>
+	<#if domain.processName??>
 	public BizWorkflow getBizWorkflow() {
 		return bizWorkflow;
 	}

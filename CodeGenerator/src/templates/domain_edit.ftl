@@ -75,7 +75,7 @@
 				</#if>
 			</#if>
 		</#list>
-		<#if domain.processName != null>
+		<#if domain.processName??>
 		<s:if test="model.id == null || model.bizWorkflow.step == 0">
 			<s:submit id="submit" key="submit" cssClass="button" />
 		</s:if>

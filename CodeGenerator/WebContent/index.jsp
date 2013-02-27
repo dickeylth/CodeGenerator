@@ -9,14 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="css/standalone.css"/>
 	<link rel="stylesheet" type="text/css" href="css/scrollable-wizard.css"/>
 	<link rel="stylesheet" type="text/css" href="css/GooUploader.css"/>
-	<!-- a little more standalone page styling 
-	<style>
-	  body {
-	  background-color:#234;
-	  padding-top:5%;
-	  }
-	</style>
-	-->
 	<script src="js/jquery.tools.min.js"></script>
 	<script src="js/ajaxfileupload.js"></script>
 	<script src="js/GooUploader.js"></script>
