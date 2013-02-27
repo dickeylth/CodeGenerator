@@ -244,9 +244,8 @@ public class UserServiceImpl implements UserService {
 		ProcessInstance processInstance = executionService.startProcessInstanceByKey(processName, variables, bizId);
 		//该表单到时候是在web页面进行申请时填写好的
 		System.out.println("申请单已填写：" + processInstance.isActive("填写申请单"));
-		//处理申请单填写任务，申请单填写任务在流程定义文件中要求写死为assignee="formFillin"
-		String taskId = taskService.findPersonalTasks("formFillin").get(0).getId();
-		taskService.completeTask(taskId);
+		//处理申请单填写状态转移
+		executionService.signalExecutionById(processInstance.getId());
 		
 		//返回申请单（业务数据）的状态以更新
 		return processInstance.getId();
@@ -257,14 +256,14 @@ public class UserServiceImpl implements UserService {
 	private String getProperRole(User user, String bizName) throws Exception{
 		List<Role> roles = findUser(user.getId()).getRoles();
 		if(roles.size() == 1){
-			return roles.get(0).getRolename();
+			return roles.get(0).getName();
 		}else{
 			for (Role role : roles) {
 				List<Permission> permissions = role.getPermissions();
 				for (Permission permission : permissions) {
 					//如果permission中有与业务名吻合的部分，表明该permission对应的role即为所需
-					if(permission.getPermission().indexOf(bizName) != -1){
-						return role.getRolename();
+					if(permission.getName().indexOf(bizName) != -1){
+						return role.getName();
 					}
 				}
 			}

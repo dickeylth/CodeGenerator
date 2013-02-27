@@ -188,6 +188,9 @@ public class MainAction extends ActionSupport implements SessionAware{
 			
 			Thread.sleep(2000);
 			message.setContent(sdf.format(new Date()) + ":\t生成系统初始化工作...");
+			session.put("msg", message);
+			
+			Thread.sleep(3000);
 			message.setStatus(1);
 			session.put("msg", message);
 			
@@ -408,8 +411,6 @@ public class MainAction extends ActionSupport implements SessionAware{
     		put(srcPath + "domain/BizWorkflow.java", "BizWorkflow.ftl");
     		//处理流程中jbpm用户体系与角色整合UserSession.java模板
     		put(srcPath + "jbpm/UserSession.java", "UserSession.ftl");
-    		//处理流程中jbpm配置文件jbpm.cfg.xml
-    		put("WEB-INF/src/jbpm.cfg.xml.ftl", "jbpm.cfg.ftl");
     		//处理流程中jbpm配置文件jbpm.identity.cfg.xml
     		put("WEB-INF/src/jbpm.identity.cfg.xml", "jbpm.identity.cfg.ftl");
     	}};

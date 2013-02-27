@@ -31,6 +31,11 @@ public class ${domain.name}Action extends BaseAction{
 	//需要编辑的model的id
 	private String id = "";
 	
+	<#if domain.processName??>
+	//与流程相关，审批时传入的任务id（TaskId)
+	private String taskId = "";
+	</#if>
+	
 	//模型驱动的实例
 	private ${domain.name} model = new ${domain.name}();
 	
@@ -338,13 +343,24 @@ public class ${domain.name}Action extends BaseAction{
 	/*
 	 * Getters 和 Setters
 	 */
-	public String getId() {
-		return id;
+	<#list ["Id", "Property", "Keyword", "Title", "RefClass", "RefId"] as item>
+	public void set${item}(String ${item?uncap_first}){
+		this.${item?uncap_first} = ${item?uncap_first};
+	}
+	public String get${item}(){
+		return ${item?uncap_first};
+	}
+	</#list>
+	
+	<#if domain.processName??>
+	public String getTaskId() {
+		return taskId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
+	</#if>
 
 	public ${domain.name} getModel() {
 		return model;
@@ -368,46 +384,6 @@ public class ${domain.name}Action extends BaseAction{
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public void setProperty(String property) {
-		this.property = property;
-	}
-
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getRefClass() {
-		return refClass;
-	}
-
-	public void setRefClass(String refClass) {
-		this.refClass = refClass;
-	}
-
-	public String getRefId() {
-		return refId;
-	}
-
-	public void setRefId(String refId) {
-		this.refId = refId;
 	}
 
 	public List<${domain.name}> getModels() {

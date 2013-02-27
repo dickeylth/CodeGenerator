@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/iframe.css" />
 </head>
-<body style="display: none">
+<body>
 	<div class="breadcrumb">
 		<div class="adminli"><a href="javascript:;">${domain.cnName}管理</a>
 			<ul class="sysadmin">

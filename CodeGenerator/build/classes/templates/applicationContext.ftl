@@ -39,6 +39,16 @@
 				hibernate.show_sql=false
 			</value>
 		</property>
+		<!-- 映射JBPM中的资源 -->
+		<property name="mappingResources">
+			<list>
+				<value>jbpm.repository.hbm.xml</value>
+	            <value>jbpm.execution.hbm.xml</value>
+	            <value>jbpm.history.hbm.xml</value>
+	            <value>jbpm.task.hbm.xml</value>
+	            <value>jbpm.identity.hbm.xml</value>
+			</list>
+		</property>
 	</bean>
 
 	<!-- 配置Hibernate的局部事务管理器，使用HibernateTransactionManager类 -->
@@ -112,9 +122,9 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="authenticationQuery" value="select password from user where username = ?" />
 		<property name="userRolesQuery"
-			value="select r.rolename from user_role ur left join role r on ur.role_id = r.id left join user u on ur.user_id = u.id where u.username = ? " />
+			value="select r.name from user_role ur left join role r on ur.role_id = r.id left join user u on ur.user_id = u.id where u.username = ? " />
 		<property name="permissionsQuery"
-			value="select p.name from role r left join role_permission rp on rp.role_id = r.id left join permission p on rp.permission_id = p.id where r.rolename = ? " />
+			value="select p.name from role r left join role_permission rp on rp.role_id = r.id left join permission p on rp.permission_id = p.id where r.name = ? " />
 		<property name="permissionsLookupEnabled" value="true" />
 		<property name="saltStyle" value="NO_SALT" />
 		<property name="credentialsMatcher" ref="hashedCredentialsMatcher" />

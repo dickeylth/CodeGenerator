@@ -41,7 +41,8 @@ public class SystemInit extends HttpServlet implements ServletContextListener {
 			
 			//创建管理员角色
 			Role role = new Role();
-			role.setRolename("ROLE_ADMIN");
+			role.setId("ROLE_ADMIN");
+			role.setName("ROLE_ADMIN");
 			
 			//创建所有资源访问权限
 			String[] domains = {<#list domains as domain>"${domain.name}",</#list>""};
@@ -71,7 +72,7 @@ public class SystemInit extends HttpServlet implements ServletContextListener {
 			userService.addUser(admin);
 			
 			System.out.println(sdf.format(new Date()) + "\t数据库初始化完毕...");
-		
+
 			userService.checkProcessDeploy();
 			System.out.println(sdf.format(new Date()) + "\t流程定义部署检查完毕...");
 		}

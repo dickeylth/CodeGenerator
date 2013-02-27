@@ -65,8 +65,8 @@ public class UserSession implements IdentitySession{
 
 	@Override
 	public List<Group> findGroupsByUser(String userId) {
-		List<Group> groups = new LinkedList<>();
 		UserDao userDao = EnvironmentImpl.getFromCurrent(UserDao.class);
+		List<Group> groups = new LinkedList<>();
 		List<Role> roles = userDao.get(userId).getRoles();
 		for (Role role : roles) {
 			groups.add(role);

@@ -6,14 +6,15 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.util.Date;
-<#if domain.name != "Role">
+<#if domain.name == "Role">
 import org.jbpm.api.identity.Group;
+<#else>
+import org.hibernate.annotations.GenericGenerator;
 </#if>
 
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class ${domain.name} implements Serializable<#if domain.name != "Role">, Group</#if> {
+public class ${domain.name} implements Serializable<#if domain.name == "Role">, Group</#if> {
 
 	/**
 	 * serialVersionUID
@@ -79,6 +80,9 @@ public class ${domain.name} implements Serializable<#if domain.name != "Role">, 
 	<#-- 定义各属性Getter & Setter -->
 	<#list domain.properties as property>
 		<#if property.plural = false>
+	<#if domain.name = "Role" && property.name = "Name">
+	@Override
+	</#if>
 	public ${property.type} get${property.name?cap_first}(){
 		return ${property.name};
 	}
@@ -109,11 +113,6 @@ public class ${domain.name} implements Serializable<#if domain.name != "Role">, 
 	
 	<#-- 由于角色需要与jbpm用户体系整合，需要对Role类进行定制 -->
 	<#if domain.name == "Role">
-	@Override
-	public String getName() {
-		return rolename;
-	}
-
 	@Override
 	public String getType() {
 		return "candidate";

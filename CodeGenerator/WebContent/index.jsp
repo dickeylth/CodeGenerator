@@ -157,7 +157,6 @@
    </div><!--items-->
 
  </div><!--wizard-->
-<s:debug></s:debug>
 <script>
 $(function() {
 	var root = $("#wizard").scrollable();

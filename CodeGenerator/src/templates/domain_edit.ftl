@@ -11,7 +11,7 @@
 <body style="display: none">
 	<div class="breadcrumb">
 		<div class="adminli">
-			<a href="javascript:history.back();" class="back">返回</a>
+			<a href="javascript:history.go(-1);" class="back">返回</a>
 		</div>
 	</div>
 	<h3>

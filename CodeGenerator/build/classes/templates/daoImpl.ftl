@@ -28,12 +28,22 @@ public class ${domain.name}DaoImpl extends HibernateDaoSupport implements ${doma
 	//保存${domain.name}
 	@Override
 	public String save(${domain.name} ${domain.name?uncap_first}) {
+		<#if domain.name = "Role">
+		if(role.getId().equals("")){
+			role.setId(role.getName());
+		}
+		</#if>
 		return (String) getHibernateTemplate().save(${domain.name?uncap_first});
 	}
 	
 	//更新${domain.name}
 	@Override
 	public void update(${domain.name} ${domain.name?uncap_first}) {
+		<#if domain.name = "Role">
+		if(role.getId().equals("")){
+			role.setId(role.getName());
+		}
+		</#if>
 		getHibernateTemplate().merge(${domain.name?uncap_first});
 	}
 	

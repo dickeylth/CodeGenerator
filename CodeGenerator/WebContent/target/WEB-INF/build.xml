@@ -7,6 +7,13 @@
   </path>
     
   <target name="c" depends="">
+  	<copy todir="./classes/jpdl">
+  		<fileset dir="./src/jpdl"/>
+  	</copy>
+  	<copy file="jbpm.cfg.xml" todir="./classes/"></copy>
+  	<move file="jbpm.cfg.xml" tofile="./src/jbpm.cfg.xml"></move>
+  	<copy todir="./classes/" file="./src/jbpm.identity.cfg.xml"></copy>
+  	
     <javac srcdir="src" destdir="classes" classpathref="p" encoding="utf-8"/>
     <native2ascii src="./src" includes="**/*.properties" dest="./classes" encoding="utf-8"/>
     <copy todir="${target}">
