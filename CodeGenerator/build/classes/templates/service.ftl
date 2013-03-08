@@ -87,7 +87,7 @@ public interface UserService {
 	/*
 	 * 系统初始化时对流程定义文件的部署
 	 */
-	void checkProcessDeploy();
+	void procProcessDeploy();
 	
 	/**
 	 * 获取当前角色任务列表

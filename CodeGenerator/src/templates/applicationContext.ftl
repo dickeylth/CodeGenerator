@@ -70,8 +70,6 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut" />
 	</aop:config>
 
-
-
 	<bean id="daoTemplate" abstract="true" p:sessionFactory-ref="sessionFactory" />
 	<#list domains as domain>
 	<bean id="${domain.name?uncap_first}Dao" class="${package}.dao.impl.${domain.name}DaoImpl" parent="daoTemplate" />
@@ -93,6 +91,15 @@
 		<property name="realm" ref="sampleRealm" />
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
+	<bean id="sampleRealm" class="${package}.security.CustomRealm" p:userDao-ref="userDao">
+		<!-- MD5加密 -->
+		<property name="credentialsMatcher">
+        	<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+	            <property name="hashAlgorithmName" value="MD5" />
+	        </bean>
+	    </property>
+	</bean>
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" />
 	<bean id="shiroAuthFilter" class="${package}.security.ShiroAuthFilter">
 		<property name="userService" ref="userService"></property>
 	</bean>
@@ -117,26 +124,7 @@
 			</value>
 		</property>
 	</bean>
-	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" />
-	<bean id="sampleRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
-		<property name="dataSource" ref="dataSource" />
-		<property name="authenticationQuery" value="select password from user where username = ?" />
-		<property name="userRolesQuery"
-			value="select r.name from user_role ur left join role r on ur.role_id = r.id left join user u on ur.user_id = u.id where u.username = ? " />
-		<property name="permissionsQuery"
-			value="select p.name from role r left join role_permission rp on rp.role_id = r.id left join permission p on rp.permission_id = p.id where r.name = ? " />
-		<property name="permissionsLookupEnabled" value="true" />
-		<property name="saltStyle" value="NO_SALT" />
-		<property name="credentialsMatcher" ref="hashedCredentialsMatcher" />
-	</bean>
-	<bean id="hashedCredentialsMatcher"
-		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-		<property name="hashAlgorithmName" value="MD5" />
-		<property name="storedCredentialsHexEncoded" value="true" />
-		<property name="hashIterations" value="1" />
-	</bean>
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-
 	<!-- 开启Shiro注解的Spring配置方式的beans。在lifecycleBeanPostProcessor之后运行 -->
 	<bean
 		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"

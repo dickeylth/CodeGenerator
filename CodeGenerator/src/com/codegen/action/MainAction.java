@@ -407,6 +407,8 @@ public class MainAction extends ActionSupport implements SessionAware{
     		put("index.jsp", "index.ftl");
     		//处理ShiroAuthFilter.java模板
     		put(srcPath + "security/ShiroAuthFilter.java", "shiro.ftl");
+    		//处理Shiro的CustomRealm.java模板
+    		put(srcPath + "security/CustomRealm.java", "CustomRealm.ftl");
     		//处理业务-流程关联类
     		put(srcPath + "domain/BizWorkflow.java", "BizWorkflow.ftl");
     		//处理流程中jbpm用户体系与角色整合UserSession.java模板

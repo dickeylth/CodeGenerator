@@ -140,27 +140,12 @@ public class UserServiceImpl implements UserService {
 	 * 处理流程部署
 	 */
 	@Override
-	public void checkProcessDeploy(){
-		//获取当前系统中已部署流程
-		List<ProcessDefinition> definitions = repositoryService.createProcessDefinitionQuery().list();
-		List<String> processList = new LinkedList<>();
-		boolean flag = false;
-		if(definitions.isEmpty()){
-			flag = true;
-		}else{
-			for (ProcessDefinition processDefinition : definitions) {
-				processList.add(processDefinition.getName());
-			}
-		}
-
-		//遍历jpdl目录下流程定义文件，检查每个文件是否已被部署过
+	public void procProcessDeploy(){
 		List<File> files = getProcessFiles();
 		for (File file : files) {
-			String name = file.getName().substring(0, file.getName().indexOf("."));
-			if(flag || !processList.contains(name)){
-				//未被部署，执行流程部署操作
-				deployProcess(file);
-			}
+			//执行流程部署操作
+			String deployId = repositoryService.createDeployment().addResourceFromFile(file).deploy();
+			System.out.println(file.getName() + "流程定义文件已部署，id为：" + deployId);
 		}
 	}
 	/*
@@ -180,13 +165,6 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return Arrays.asList(files);
-	}
-	/*
-	 * 执行流程定义xml文件部署到系统
-	 */
-	private void deployProcess(File file){
-		String deployId = repositoryService.createDeployment().addResourceFromFile(file).deploy();
-		System.out.println("流程定义文件" + file.getName() + "已部署，id为：" + deployId);
 	}
 
 	/**
