@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.jbpm.api.ExecutionService;
 import org.jbpm.api.HistoryService;
-import org.jbpm.api.ProcessDefinition;
 import org.jbpm.api.ProcessInstance;
 import org.jbpm.api.RepositoryService;
 import org.jbpm.api.TaskService;
