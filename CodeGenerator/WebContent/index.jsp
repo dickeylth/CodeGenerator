@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>SSH2 + Shiro 程序代码生成器</title>
+	<title>SSH2与jBPM、Shiro整合程序代码生成器</title>
 	<link rel="shortcut icon" href="img/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="css/standalone.css"/>
 	<link rel="stylesheet" type="text/css" href="css/scrollable-wizard.css"/>
@@ -13,8 +13,16 @@
 	<script src="js/ajaxfileupload.js"></script>
 	<script src="js/GooUploader.js"></script>
 	<script src="js/swfupload.js"></script>
+	<style type="text/css">
+	#title{
+		color: #0072db;
+		text-align: center;
+		margin: 50px 0 20px 0;
+	}
+	</style>
 </head>
 <body>
+	<h2 id="title">SSH2与jBPM、Shiro框架整合代码生成器</h2>
 <div id="drawer">
   请输入<samp style="color:red">红框</samp>内的内容！
 </div>

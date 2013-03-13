@@ -1,5 +1,5 @@
 @charset "utf-8";
-html,body{font-size:12px;color:#333333;height:100%;}
+html,body{font-size:12px;color:#333333;height:100%;margin:0;padding:0;overflow:hidden;}
 .Uploader{
 	font: 12px Arial, Helvetica, sans-serif;overflow:hidden;margin:0px;position:relative;
 	-moz-border-radius:4px;-webkit-border-radius:4px; border:#99BBE8 1px solid;background:#F0F4F9;padding:1px;

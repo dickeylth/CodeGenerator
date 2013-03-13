@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>编辑</title>
 	<link rel="stylesheet" href="css/iframe.css" />
+	<sx:head/>
 </head>
 <body style="display: none">
 	<div class="breadcrumb">
@@ -68,10 +70,15 @@
 		<s:label key="${domain.name?uncap_first}.${property.name}"/>
 		
 				<#elseif property.pk = false>
-		<!-- 基本类型 -->
+		<!-- 日期类型 -->
+		<#if property.type = "Date">
+		<sx:datetimepicker name="model.${property.name}" value="%{model.${property.name}}" 
+			label='%{getText("${domain.name?uncap_first}.${property.name}")}' displayFormat="yyyy-MM-dd"/>
+		<#else>
+		<!-- 其他类型 -->
 		<s:textfield name="model.${property.name}" value="%{model.${property.name}}"
 			key="${domain.name?uncap_first}.${property.name}" />
-		
+		</#if>
 				</#if>
 			</#if>
 		</#list>

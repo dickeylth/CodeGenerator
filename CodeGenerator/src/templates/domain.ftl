@@ -42,7 +42,7 @@ public class ${domain.name} implements Serializable<#if domain.name == "Role">, 
 	private ${property.type} ${property.name};
 		<#-- 多对多 -->
 		<#elseif property.refDomainPo.refType = "many-to-many">
-	@ManyToMany(cascade = CascadeType.REFRESH)
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "${property.refDomainPo.joinTable}",
 	joinColumns = {@JoinColumn(name = "${property.refDomainPo.joinColumn}")},
 	inverseJoinColumns = {@JoinColumn(name = "${property.refDomainPo.inverseJoinColumn}")})

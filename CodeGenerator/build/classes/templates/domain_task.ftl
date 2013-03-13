@@ -47,6 +47,8 @@
 						<#list domain.displayProps as property>
 							<#if property.refDomainPo??>
 						<td><s:property value="#model.${property.name}.${property.refDomainPo.refDisplayProp}"/></td>
+							<#elseif property.type = "Date">
+						<td><s:date name="#model.${property.name}" format="yyyy-MM-dd"/></td>
 							<#else>
 						<td><s:property value="#model.${property.name}"/></td>
 							</#if>

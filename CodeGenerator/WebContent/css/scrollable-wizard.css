@@ -4,7 +4,7 @@
     background:#fff url(../img/h600.png) repeat scroll 0 0;
     border:5px solid #789;
     font-size:12px;
-    height:540px;
+    height:520px;
     margin:8px auto;
     width:570px;
     overflow:hidden;
@@ -154,7 +154,7 @@ button{
     list-style-image:none;
     float:left;
     color:#fff;
-    padding:10px 30px;
+    padding:10px 20px;
 }
 
 #status li.active {
