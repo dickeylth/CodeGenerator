@@ -31,7 +31,7 @@
 			</div>
 		</shiro:hasPermission>
 		<img src="img/seperator.png" style="float:left;width:13px;height:33px">
-		<span class="breaditem"><s:text name="permission" />管理</span>
+		<span class="breaditem"><s:text name="${sysDomains?uncap_first}" />管理</span>
 	</div>
 	</#if>
 	<#if domain.processName??>

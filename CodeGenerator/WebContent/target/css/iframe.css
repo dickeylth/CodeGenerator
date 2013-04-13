@@ -17,7 +17,7 @@ body {
 }
 
 li:hover,li:hover a,.sysadmin li:hover a,a.on {
-	background-color: #ACDAF4;
+	background-color: #EFEFEF;
 	color: #0072DB;
 }
 
@@ -36,12 +36,12 @@ a.on{
 	text-decoration: none;
 	cursor: pointer;
 	display: block;
-	padding: 7px;
+	padding: 7px 16px;
 }
 
 .adminli>a.back{
 	background: url(../img/back.png) no-repeat fixed 10px 9px;
-	padding-left: 16px;
+	padding-left: 30px;
 }
 
 .adminli:hover{
@@ -54,7 +54,7 @@ a.on{
 
 .breaditem{
 	float: left;
-	padding: 7px;
+	padding: 7px 16px;
 }
 
 .sysadmin {
